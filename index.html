@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portafolio — Cultura Digital 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --orange-deep:   #c94a00;
+      --orange-mid:    #e8620a;
+      --orange-bright: #ff8c38;
+      --orange-light:  #ffb97a;
+      --orange-glow:   #ffd4a8;
+      --cream:         #f5f0e8;
+      --bone:          #ede8dc;
+      --white:         #ffffff;
+      --black:         #1a1208;
+      --text-dark:     #2b1d0a;
+      --text-mid:      #5c3d1e;
+      --card-shadow:   0 8px 32px rgba(201,74,0,0.13);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bone);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    /* ── PORTADA ── */
+    .cover {
+      position: relative;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--orange-deep) 0%, var(--orange-mid) 45%, var(--orange-bright) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 60px 24px 40px;
+    }
+
+    /* decorative circles */
+    .cover::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.10);
+      top: -200px; right: -200px;
+      pointer-events: none;
+    }
+    .cover::after {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.08);
+      bottom: -150px; left: -100px;
+      pointer-events: none;
+    }
+
+    .cover-inner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    .tag-portfolio {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.70rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--orange-glow);
+      margin-bottom: 10px;
+      opacity: 0.85;
+    }
+
+    .cover-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 9vw, 5.6rem);
+      font-weight: 900;
+      line-height: 1.0;
+      color: var(--white);
+      text-shadow: 0 4px 30px rgba(0,0,0,0.25);
+      margin-bottom: 10px;
+    }
+
+    .cover-subtitle {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(0.85rem, 2.2vw, 1.1rem);
+      color: var(--orange-glow);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    .cover-by {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.06em;
+      margin-bottom: 40px;
+    }
+    .cover-by span {
+      color: var(--white);
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    /* Social row */
+    .social-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 26px;
+      border-radius: 50px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      letter-spacing: 0.04em;
+    }
+    .social-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.25); }
+
+    .social-btn.fb {
+      background: #1877f2;
+      color: #fff;
+    }
+    .social-btn.ig {
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: #fff;
+    }
+
+    .social-btn svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
+
+    /* ── CARDS SECTION ── */
+    .section {
+      background: var(--bone);
+      padding: 64px 24px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      color: var(--orange-deep);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .section-line {
+      width: 60px; height: 3px;
+      background: linear-gradient(90deg, var(--orange-mid), var(--orange-bright));
+      border-radius: 2px;
+      margin: 0 auto 48px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 48px rgba(201,74,0,0.20);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      display: block;
+      background: var(--orange-glow);
+    }
+
+    /* fallback gradient per card */
+    .card-img-placeholder {
+      width: 100%;
+      height: 190px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    .card-img-placeholder.ai   { background: linear-gradient(135deg, var(--orange-deep) 0%, var(--orange-mid) 45%, var(--orange-bright) 100%); }
+    .card-img-placeholder.web  { background: linear-gradient(135deg, var(--orange-deep) 0%, var(--orange-mid) 45%, var(--orange-bright) 100%); }
+    .card-img-placeholder.data { background: linear-gradient(135deg, var(--orange-deep) 0%, var(--orange-mid) 45%, var(--orange-bright) 100%); }
+    .card-img-placeholder.ml   { background: linear-gradient(135deg, var(--orange-deep) 0%, var(--orange-mid) 45%, var(--orange-bright) 100%); }
+    .card-img-placeholder.net  { background: linear-gradient(135deg, var(--orange-deep) 0%, var(--orange-mid) 45%, var(--orange-bright) 100%); }
+    .card-img-placeholder.eth  { background: linear-gradient(135deg, var(--orange-deep) 0%, var(--orange-mid) 45%, var(--orange-bright) 100%); }
+
+    .card-body {
+      padding: 20px 22px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--orange-mid);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.12rem;
+      color: var(--black);
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 0.84rem;
+      color: #5c3d1e;
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 20px;
+    }
+
+    .card-btn {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 9px 22px;
+      background: linear-gradient(90deg, var(--orange-deep), var(--orange-mid));
+      color: #fff;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: opacity .2s, transform .2s;
+      cursor: pointer;
+      border: none;
+    }
+    .card-btn:hover { opacity: 0.88; transform: scale(1.04); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: linear-gradient(135deg, var(--orange-deep) 0%, var(--orange-mid) 100%);
+      color: rgba(255,255,255,0.90);
+      text-align: center;
+      padding: 40px 24px;
+    }
+
+    .footer-school {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(0.85rem, 2vw, 1.05rem);
+      color: var(--white);
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .footer-details {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--orange-glow);
+      line-height: 1.8;
+    }
+
+    .footer-divider {
+      width: 40px; height: 2px;
+      background: rgba(255,255,255,0.3);
+      margin: 16px auto;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ PORTADA ══════════════ -->
+<header class="cover">
+  <div class="cover-inner">
+
+    <p class="tag-portfolio">Portafolio de tareas</p>
+
+    <h1 class="cover-title">Cultura Digital&nbsp;2</h1>
+
+    <p class="cover-subtitle">✦ Inteligencia Artificial ✦</p>
+
+    <p class="cover-by">by <span>Matias</span></p>
+
+    <!-- Redes sociales -->
+    <div class="social-row">
+      <a target="_blank" href="https://www.facebook.com" class="social-btn fb">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.675 0h-21.35C.595 0 0 .595 0 1.326v21.348C0 23.406.595 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.594 1.323-1.326V1.326C24 .595 23.406 0 22.675 0z"/>
+        </svg>
+        Facebook
+      </a>
+      <a target="_blank" href="https://www.instagram.com" class="social-btn ig">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.333 3.608 1.308.975.975 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.333-3.608-1.308-.975-.975-1.246-2.242-1.308-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.333-2.633 1.308-3.608C4.516 2.567 5.783 2.296 7.15 2.233 8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.355.673 2.014 2.014.673 3.355.157 5.197.072 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.085 1.855.601 3.697 1.942 5.038 1.341 1.341 3.183 1.857 5.038 1.942C8.332 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 1.855-.085 3.697-.601 5.038-1.942 1.341-1.341 1.857-3.183 1.942-5.038C23.986 15.668 24 15.259 24 12c0-3.259-.014-3.668-.072-4.948-.085-1.855-.601-3.697-1.942-5.038C20.645.673 18.803.157 16.948.072 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+        </svg>
+        Instagram
+      </a>
+    </div>
+
+  </div>
+</header>
+
+<!-- ══════════════ CARDS ══════════════ -->
+<main>
+  <div class="section">
+    <h2 class="section-title">Mis Tareas</h2>
+    <div class="section-line"></div>
+
+    <div class="cards-grid">
+
+      <!-- Card 1 -->
+      <div class="card">
+        <div class="card-img-placeholder ai">
+          <img src="imagenes/tim.jpg" width="100%">
+        </div>
+        <div class="card-body">
+          <span class="card-num">Tarea 01</span>
+          <h3 class="card-title">El padre del internet</h3>
+          <p class="card-desc">Sir Timothy John Berners-Lee, conocido mundialmente como TimBL y considerado padre del internet, creador de la www. . .</p>
+          <a href="tarea1.html"class="card-btn">Ver tarea</a>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card">
+        <div class="card-img-placeholder web">
+          <img src="imagenes/lenguajes.jpg" width="100%" height="92%">
+        </div>
+        <div class="card-body">
+          <span class="card-num">Tarea 02</span>
+          <h3 class="card-title">Lenguajes de diseño y programacion</h3>
+          <p class="card-desc">Desde las instrucciones que estructuran una página web hasta los algoritmos de inteligencia artificial, todo en el mundo digital está escrito en algún lenguaje. . .</p>
+          <a href="tarea2.html"class="card-btn">Ver tarea</a>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card">
+        <div class="card-img-placeholder data">
+          <img src="imagenes/html5.jpg" width="100%" height="92%">
+        </div>
+        <div class="card-body">
+          <span class="card-num">Tarea 03</span>
+          <h3 class="card-title">Guia para html5</h3>
+          <p class="card-desc">HTML significa HyperText Markup Language (Lenguaje de Marcado de Hipertexto). Es el lenguaje estándar para crear páginas web. No es un lenguaje de programación. . .</p>
+          <a href="tarea3.html"class="card-btn">Ver tarea</a>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card">
+        <div class="card-img-placeholder ml">
+          <img src="imagenes/css3.jpg" width="100%" height="92%">
+        </div>
+        <div class="card-body">
+          <span class="card-num">Tarea 04</span>
+          <h3 class="card-title">Guia para css3</h3>
+          <p class="card-desc">Algoritmos supervisados y no supervisados, redes neuronales y aplicación en casos reales de predicción.</p>
+          <a href="tarea4.html"class="card-btn">Ver tarea</a>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="card">
+        <div class="card-img-placeholder net"></div>
+        <div class="card-body">
+          <span class="card-num">Tarea 05</span>
+          <h3 class="card-title">. . .</h3>
+          <p class="card-desc">. . .</p>
+          <button class="card-btn">Ver tarea</button>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="card">
+        <div class="card-img-placeholder eth"></div>
+        <div class="card-body">
+          <span class="card-num">Tarea 06</span>
+          <h3 class="card-title">. . .</h3>
+          <p class="card-desc">. . .</p>
+          <button class="card-btn">Ver tarea</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <p class="footer-school">Centro de Bachillerato Tecnológico Industrial y de Servicios No. 144</p>
+  <div class="footer-divider"></div>
+  <p class="footer-details">
+    Especialidad: Inteligencia Artificial  Alumno:Garduño Escobar Matias Rafael<br>
+    Profesor: Jordy Jesús Chirino Balcázar
+  </p>
+</footer>
+
+</body>
+</html>

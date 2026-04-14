@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lenguajes de Diseño y Programación — Cultura Digital 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --orange-deep:   #c94a00;
+      --orange-mid:    #e8620a;
+      --orange-bright: #ff8c38;
+      --orange-glow:   #ffd4a8;
+      --cream:         #f5f0e8;
+      --bone:          #ede8dc;
+      --white:         #ffffff;
+      --ink:           #0b0f1a;
+      --ink-mid:       #131929;
+      --ink-light:     #1e2840;
+      --text-body:     #d4dce8;
+      --text-muted:    #7a8fa6;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--ink); color: var(--text-body); }
+
+    /* ── NAV ── */
+    .topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 32px;
+      background: rgba(11,15,26,0.88); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,140,56,0.12);
+    }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 8px 20px; border-radius: 50px;
+      border: 1.5px solid rgba(255,140,56,0.55); background: transparent;
+      color: var(--orange-bright); font-family: 'Space Mono', monospace;
+      font-size: 0.75rem; letter-spacing: 0.12em; text-decoration: none;
+      cursor: pointer; transition: background .2s, color .2s, transform .2s;
+    }
+    .back-btn:hover { background: var(--orange-mid); color: #fff; border-color: var(--orange-mid); transform: translateX(-3px); }
+    .back-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-badge { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.15em; text-transform: uppercase; }
+    .nav-badge span { color: var(--orange-bright); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; min-height: 92vh;
+      display: flex; align-items: flex-end; padding-bottom: 72px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 30% 50%, rgba(80,20,0,0.38) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 75% 30%, rgba(30,20,60,0.40) 0%, transparent 65%),
+        linear-gradient(160deg, #0b0f1a 0%, #160c04 55%, #0b0f1a 100%);
+    }
+    /* Code rain columns decoration */
+    .code-rain {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden; opacity: 0.06;
+      font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--orange-bright);
+    }
+    .rain-col {
+      position: absolute; top: -20%; display: flex; flex-direction: column; gap: 6px;
+      animation: fall linear infinite;
+    }
+    @keyframes fall { to { transform: translateY(120vh); } }
+
+    .hero-content { position: relative; z-index: 2; max-width: 680px; padding: 0 60px; }
+    .hero-tag {
+      font-family: 'Space Mono', monospace; font-size: 0.70rem;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--orange-bright); margin-bottom: 18px;
+      display: flex; align-items: center; gap: 10px;
+      opacity: 0; animation: fadeUp .6s .1s ease forwards;
+    }
+    .hero-tag::before { content: ''; display: block; width: 32px; height: 1.5px; background: var(--orange-bright); }
+    .hero-title {
+      font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 900; line-height: 1.0; color: var(--white); margin-bottom: 16px;
+      opacity: 0; animation: fadeUp .6s .25s ease forwards;
+    }
+    .hero-title em { font-style: italic; color: var(--orange-bright); }
+    .hero-desc {
+      font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; max-width: 520px;
+      margin-bottom: 32px;
+      opacity: 0; animation: fadeUp .6s .40s ease forwards;
+    }
+    .hero-desc strong { color: var(--text-body); }
+    .category-pills {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp .6s .55s ease forwards;
+    }
+    .pill {
+      padding: 7px 18px; border-radius: 50px; font-family: 'Space Mono', monospace;
+      font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+      border: 1.5px solid; cursor: default;
+    }
+    .pill-web  { border-color: #61dafb; color: #61dafb; background: rgba(97,218,251,0.07); }
+    .pill-desk { border-color: #a78bfa; color: #a78bfa; background: rgba(167,139,250,0.07); }
+    .pill-design { border-color: var(--orange-bright); color: var(--orange-bright); background: rgba(255,140,56,0.07); }
+
+    /* SVG hero visual */
+    .hero-svg-wrap {
+      position: absolute; right: 2%; top: 0; bottom: 0;
+      width: clamp(260px, 36vw, 480px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; animation: fadeIn .9s .45s ease forwards;
+      pointer-events: none; overflow: hidden;
+    }
+    .hero-svg-wrap svg { width: 100%; height: auto; display: block; }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* ── ARTICLE ── */
+    .article { max-width: 960px; margin: 0 auto; padding: 80px 32px 100px; }
+
+    .sep { display: flex; align-items: center; gap: 16px; margin: 64px 0 32px; }
+    .sep-line { flex: 1; height: 1px; background: rgba(255,140,56,0.15); }
+    .sep-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.22em; color: var(--orange-bright); text-transform: uppercase; white-space: nowrap; }
+
+    h2.section-heading {
+      font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 3.5vw, 2rem);
+      color: var(--white); font-weight: 700; margin-bottom: 10px; line-height: 1.25;
+    }
+    .section-intro { font-size: 0.97rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 40px; max-width: 700px; }
+    .section-intro strong { color: var(--text-body); }
+
+    /* ── LANGUAGE CARD ── */
+    .lang-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; }
+    .lang-card {
+      background: var(--ink-mid); border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden; transition: transform .25s, box-shadow .25s;
+    }
+    .lang-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+
+    .lang-card-top {
+      height: 110px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; position: relative; overflow: hidden;
+    }
+    .lang-card-top::after {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px);
+      pointer-events: none;
+    }
+    /* Logo placeholder circle */
+    .lang-logo {
+      width: 58px; height: 58px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; font-weight: 900; flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.14); position: relative; z-index:1;
+      font-family: 'Space Mono', monospace;
+    }
+    .lang-img {
+      width: 58px; height: 58px; border-radius: 14px; object-fit: contain;
+      border: 2px solid rgba(255,255,255,0.14); background: rgba(0,0,0,0.30);
+      padding: 6px; position: relative; z-index: 1;
+    }
+    .lang-name-block { text-align: right; position: relative; z-index:1; }
+    .lang-name { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--white); line-height: 1.1; }
+    .lang-type-badge {
+      display: inline-block; margin-top: 4px;
+      padding: 2px 10px; border-radius: 20px;
+      font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .lang-body { padding: 18px 22px 22px; }
+    .lang-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 16px; }
+    .lang-desc strong { color: var(--text-body); }
+
+    /* Code snippet */
+    .code-block {
+      background: #0d1117; border-radius: 10px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .code-bar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 14px; background: rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #28c840; }
+    .code-file { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--text-muted); margin-left: auto; }
+    pre.code-content {
+      padding: 14px 16px; font-family: 'Space Mono', monospace; font-size: 0.72rem;
+      line-height: 1.7; overflow-x: auto; color: #abb2bf; margin: 0;
+    }
+    /* Basic syntax highlight via spans */
+    .kw  { color: #c678dd; } /* keyword */
+    .fn  { color: #61afef; } /* function */
+    .str { color: #98c379; } /* string */
+    .num { color: #d19a66; } /* number */
+    .cm  { color: #5c6370; font-style: italic; } /* comment */
+    .tg  { color: #e06c75; } /* tag */
+    .at  { color: #d19a66; } /* attribute */
+    .vl  { color: #98c379; } /* value */
+    .sel { color: #e06c75; } /* selector */
+    .prp { color: #56b6c2; } /* property */
+
+    /* ── Colors per language ── */
+    .bg-html   { background: linear-gradient(135deg,rgba(227,79,38,0.35) 0%,rgba(20,10,5,0) 100%); }
+    .bg-css    { background: linear-gradient(135deg,rgba(38,77,228,0.35) 0%,rgba(5,10,20,0) 100%); }
+    .bg-js     { background: linear-gradient(135deg,rgba(247,223,30,0.25) 0%,rgba(20,18,0,0) 100%); }
+    .bg-php    { background: linear-gradient(135deg,rgba(119,123,180,0.35) 0%,rgba(10,10,20,0) 100%); }
+    .bg-py     { background: linear-gradient(135deg,rgba(53,114,165,0.35) 0%,rgba(5,10,20,0) 100%); }
+    .bg-java   { background: linear-gradient(135deg,rgba(248,152,32,0.30) 0%,rgba(20,10,5,0) 100%); }
+    .bg-cs     { background: linear-gradient(135deg,rgba(104,33,122,0.40) 0%,rgba(10,5,20,0) 100%); }
+    .bg-cpp    { background: linear-gradient(135deg,rgba(0,89,156,0.35) 0%,rgba(5,10,20,0) 100%); }
+    .bg-fig    { background: linear-gradient(135deg,rgba(162,89,255,0.30) 0%,rgba(10,5,20,0) 100%); }
+    .bg-scss   { background: linear-gradient(135deg,rgba(205,103,153,0.30) 0%,rgba(20,5,15,0) 100%); }
+    .bg-tail   { background: linear-gradient(135deg,rgba(6,182,212,0.28) 0%,rgba(5,15,20,0) 100%); }
+    .bg-xd     { background: linear-gradient(135deg,rgba(255,0,153,0.28) 0%,rgba(20,0,15,0) 100%); }
+
+    .badge-web  { background: rgba(97,218,251,0.15); color: #61dafb; }
+    .badge-desk { background: rgba(167,139,250,0.15); color: #a78bfa; }
+    .badge-design { background: rgba(255,140,56,0.15); color: var(--orange-bright); }
+
+    /* ── COMPARISON TABLE ── */
+    .compare-wrap { overflow-x: auto; margin: 28px 0; }
+    table.compare {
+      width: 100%; border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    table.compare th {
+      font-family: 'Space Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--orange-bright); padding: 12px 16px;
+      border-bottom: 2px solid rgba(255,140,56,0.20);
+      text-align: left; background: rgba(255,140,56,0.04);
+    }
+    table.compare td {
+      padding: 11px 16px; border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: var(--text-body); vertical-align: middle;
+    }
+    table.compare tr:hover td { background: rgba(255,255,255,0.03); }
+    .diff-badge {
+      display: inline-block; padding: 2px 10px; border-radius: 20px;
+      font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em;
+    }
+    .diff-easy   { background: rgba(40,200,64,0.15);  color: #4ade80; }
+    .diff-medium { background: rgba(247,183,51,0.15); color: #fbbf24; }
+    .diff-hard   { background: rgba(239,68,68,0.15);  color: #f87171; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: linear-gradient(135deg, var(--orange-deep) 0%, var(--orange-mid) 100%);
+      color: rgba(255,255,255,0.90); text-align: center; padding: 40px 24px;
+    }
+    .footer-school { font-family: 'Playfair Display', serif; font-size: clamp(0.85rem,2vw,1.05rem); color: var(--white); font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
+    .footer-details { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.12em; color: var(--orange-glow); line-height: 1.8; }
+    .footer-divider { width: 40px; height: 2px; background: rgba(255,255,255,0.3); margin: 16px auto; border-radius: 2px; }
+
+    @media(max-width:768px){
+      .topnav{padding:12px 20px;} .hero-svg-wrap{display:none;}
+      .hero-content{padding:0 24px;} .article{padding:60px 20px 80px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav class="topnav">
+  <a href="index.html" class="back-btn">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    Volver al portafolio
+  </a>
+  <span class="nav-badge">Tarea <span>02</span> — Cultura Digital 2</span>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <!-- Raining code columns -->
+  <div class="code-rain" aria-hidden="true">
+    <div class="rain-col" style="left:5%;animation-duration:8s;">
+      <span>&lt;div&gt;</span><span>const</span><span>  fn()</span><span>#ff0</span><span>.class</span><span>int x</span>
+    </div>
+    <div class="rain-col" style="left:20%;animation-duration:11s;animation-delay:-3s;">
+      <span>@media</span><span>print()</span><span>while{</span><span>rgb()</span><span>SELECT</span>
+    </div>
+    <div class="rain-col" style="left:40%;animation-duration:9s;animation-delay:-1s;">
+      <span>:root</span><span>import</span><span>return</span><span>&lt;/p&gt;</span><span>var i</span>
+    </div>
+    <div class="rain-col" style="left:60%;animation-duration:13s;animation-delay:-5s;">
+      <span>class</span><span>flex</span><span>async</span><span>body{</span><span>null</span>
+    </div>
+    <div class="rain-col" style="left:80%;animation-duration:10s;animation-delay:-2s;">
+      <span>margin</span><span>true</span><span>catch</span><span>grid</span><span>API</span>
+    </div>
+  </div>
+
+  <!-- SVG Visual: Lenguajes de Diseño & Programación -->
+  <div class="hero-svg-wrap">
+    <svg viewBox="0 0 660 340" xmlns="http://www.w3.org/2000/svg">
+      <!-- Tarjeta 1: HTML5 -->
+      <rect x="10" y="10" width="140" height="140" rx="22" fill="#D84315"/>
+      <rect x="10" y="10" width="140" height="140" rx="22" fill="none" stroke="#FF6D00" stroke-width="1.5" opacity="0.6"/>
+      <text x="80" y="68" text-anchor="middle" font-family="monospace" font-size="34" font-weight="700" fill="#FFFFFF" opacity="0.95">&lt;/&gt;</text>
+      <text x="80" y="126" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="600" fill="#FFAB91">HTML5</text>
+      <circle cx="30" cy="30" r="3" fill="#FF6D00" opacity="0.5"/>
+      <circle cx="140" cy="30" r="3" fill="#FF6D00" opacity="0.5"/>
+      <!-- Tarjeta 2: CSS -->
+      <rect x="170" y="10" width="140" height="140" rx="22" fill="#1565C0"/>
+      <rect x="170" y="10" width="140" height="140" rx="22" fill="none" stroke="#42A5F5" stroke-width="1.5" opacity="0.6"/>
+      <text x="240" y="68" text-anchor="middle" font-family="monospace" font-size="38" font-weight="700" fill="#FFFFFF" opacity="0.95">#</text>
+      <text x="240" y="122" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="600" fill="#90CAF9">CSS3</text>
+      <!-- Tarjeta 3: JavaScript -->
+      <rect x="330" y="10" width="140" height="140" rx="22" fill="#F9A825"/>
+      <rect x="330" y="10" width="140" height="140" rx="22" fill="none" stroke="#FFF176" stroke-width="1.5" opacity="0.5"/>
+      <text x="400" y="68" text-anchor="middle" font-family="monospace" font-size="34" font-weight="700" fill="#1A1A00" opacity="0.9">JS</text>
+      <text x="400" y="122" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="600" fill="#4E342E">JavaScript</text>
+      <!-- Tarjeta 4: Python -->
+      <rect x="490" y="10" width="140" height="140" rx="22" fill="#1B5E20"/>
+      <rect x="490" y="10" width="140" height="140" rx="22" fill="none" stroke="#66BB6A" stroke-width="1.5" opacity="0.6"/>
+      <path d="M545 108 Q540 83 555 78 Q572 73 575 90 Q578 103 565 106 Q555 108 552 120" fill="none" stroke="#A5D6A7" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="552" cy="125" r="5" fill="#66BB6A"/>
+      <circle cx="550" cy="78" r="7" fill="#388E3C"/>
+      <circle cx="548" cy="76" r="2" fill="#A5D6A7"/>
+      <text x="560" y="126" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="600" fill="#A5D6A7">Python</text>
+      <!-- Tarjeta 5: Figma -->
+      <rect x="10" y="170" width="140" height="140" rx="22" fill="#4A148C"/>
+      <rect x="10" y="170" width="140" height="140" rx="22" fill="none" stroke="#CE93D8" stroke-width="1.5" opacity="0.6"/>
+      <polygon points="80,195 103,228 80,250 57,228" fill="none" stroke="#CE93D8" stroke-width="2.5"/>
+      <polygon points="80,207 93,228 80,242 67,228" fill="#7B1FA2" stroke="#CE93D8" stroke-width="1.5"/>
+      <text x="80" y="290" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="600" fill="#CE93D8">Figma/CSS</text>
+      <!-- Tarjeta 6: SQL -->
+      <rect x="170" y="170" width="140" height="140" rx="22" fill="#0D47A1"/>
+      <rect x="170" y="170" width="140" height="140" rx="22" fill="none" stroke="#64B5F6" stroke-width="1.5" opacity="0.6"/>
+      <ellipse cx="240" cy="210" rx="28" ry="9" fill="#1565C0" stroke="#64B5F6" stroke-width="1.5"/>
+      <rect x="212" y="210" width="56" height="35" fill="#1565C0"/>
+      <ellipse cx="240" cy="245" rx="28" ry="9" fill="#1E88E5" stroke="#64B5F6" stroke-width="1.5"/>
+      <line x1="212" y1="225" x2="212" y2="244" stroke="#64B5F6" stroke-width="1.5"/>
+      <line x1="268" y1="225" x2="268" y2="244" stroke="#64B5F6" stroke-width="1.5"/>
+      <text x="240" y="290" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="600" fill="#90CAF9">SQL / BD</text>
+      <!-- Tarjeta 7: React -->
+      <rect x="330" y="170" width="140" height="140" rx="22" fill="#004D61"/>
+      <rect x="330" y="170" width="140" height="140" rx="22" fill="none" stroke="#4DD0E1" stroke-width="1.5" opacity="0.6"/>
+      <circle cx="400" cy="238" r="7" fill="#4DD0E1"/>
+      <ellipse cx="400" cy="238" rx="32" ry="12" fill="none" stroke="#4DD0E1" stroke-width="2" opacity="0.8"/>
+      <ellipse cx="400" cy="238" rx="32" ry="12" fill="none" stroke="#4DD0E1" stroke-width="2" opacity="0.8" transform="rotate(60 400 238)"/>
+      <ellipse cx="400" cy="238" rx="32" ry="12" fill="none" stroke="#4DD0E1" stroke-width="2" opacity="0.8" transform="rotate(120 400 238)"/>
+      <text x="400" y="290" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="600" fill="#4DD0E1">React/JS</text>
+      <!-- Tarjeta 8: Git -->
+      <rect x="490" y="170" width="140" height="140" rx="22" fill="#B71C1C"/>
+      <rect x="490" y="170" width="140" height="140" rx="22" fill="none" stroke="#EF9A9A" stroke-width="1.5" opacity="0.6"/>
+      <circle cx="560" cy="203" r="7" fill="#EF9A9A"/>
+      <circle cx="535" cy="235" r="7" fill="#EF9A9A"/>
+      <circle cx="585" cy="235" r="7" fill="#EF9A9A"/>
+      <circle cx="560" cy="263" r="7" fill="#EF9A9A"/>
+      <line x1="560" y1="210" x2="538" y2="228" stroke="#EF9A9A" stroke-width="2.5"/>
+      <line x1="560" y1="210" x2="582" y2="228" stroke="#EF9A9A" stroke-width="2.5"/>
+      <line x1="538" y1="242" x2="558" y2="256" stroke="#EF9A9A" stroke-width="2.5"/>
+      <line x1="582" y1="242" x2="562" y2="256" stroke="#EF9A9A" stroke-width="2.5"/>
+      <text x="560" y="290" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="600" fill="#EF9A9A">Git / Control</text>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-tag">Cultura Digital 2 · Tarea 02</p>
+    <h1 class="hero-title">Lenguajes de<br><em>Diseño &amp; Code</em></h1>
+    <p class="hero-desc">
+      Desde las instrucciones que estructuran una página web hasta los algoritmos de <strong>inteligencia artificial</strong>, todo en el mundo digital está escrito en algún lenguaje. Conocerlos es hablar el idioma de la era digital.
+    </p>
+    <div class="category-pills">
+      <span class="pill pill-web">Desarrollo Web</span>
+      <span class="pill pill-desk">Aplicaciones de Escritorio</span>
+      <span class="pill pill-design">Diseño y Maquetación</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ARTICLE ══ -->
+<article class="article">
+
+  <!-- ═══ SECCIÓN 1: WEB ═══ -->
+  <div class="sep"><div class="sep-line"></div><span class="sep-label">🌐 Desarrollo Web</span><div class="sep-line"></div></div>
+  <h2 class="section-heading">Lenguajes para la Web</h2>
+  <p class="section-intro">
+    La Web funciona con una combinación de lenguajes que trabajan en capas. <strong>HTML</strong> da estructura, <strong>CSS</strong> da estilo, <strong>JavaScript</strong> da interactividad y lenguajes como <strong>PHP</strong> gestionan la lógica del servidor. Dominarlos es el primer paso de cualquier desarrollador.
+  </p>
+
+  <div class="lang-grid">
+
+    <!-- HTML -->
+    <div class="lang-card">
+      <div class="lang-card-top bg-html">
+        <div class="lang-logo" style="background:linear-gradient(135deg,#e34f26,#7a200a);color:#fff;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5" style="width:38px;height:38px;">
+        </div>
+        <div class="lang-name-block">
+          <div class="lang-name">HTML 5</div>
+          <span class="lang-type-badge badge-web">Front-end · Marcado</span>
+        </div>
+      </div>
+      <div class="lang-body">
+        <p class="lang-desc"><strong>HyperText Markup Language</strong> es el esqueleto de toda página web. Define la estructura y el significado semántico del contenido: encabezados, párrafos, listas, imágenes, formularios y más. Sin HTML, la Web no existe.</p>
+        <div class="code-block">
+          <div class="code-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="code-file">index.html</span></div>
+          <pre class="code-content"><span class="cm">&lt;!-- Estructura básica HTML5 --&gt;</span>
+<span class="tg">&lt;header</span> <span class="at">class</span>=<span class="vl">"hero"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;h1&gt;</span>Hola, Mundo<span class="tg">&lt;/h1&gt;</span>
+  <span class="tg">&lt;p&gt;</span>Bienvenido a mi sitio<span class="tg">&lt;/p&gt;</span>
+  <span class="tg">&lt;a</span> <span class="at">href</span>=<span class="vl">"#"</span><span class="tg">&gt;</span>Ver más<span class="tg">&lt;/a&gt;</span>
+<span class="tg">&lt;/header&gt;</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSS -->
+    <div class="lang-card">
+      <div class="lang-card-top bg-css">
+        <div class="lang-logo" style="background:linear-gradient(135deg,#264de4,#0f2380);color:#fff;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3" style="width:38px;height:38px;">
+        </div>
+        <div class="lang-name-block">
+          <div class="lang-name">CSS 3</div>
+          <span class="lang-type-badge badge-web">Front-end · Estilos</span>
+        </div>
+      </div>
+      <div class="lang-body">
+        <p class="lang-desc"><strong>Cascading Style Sheets</strong> controla la apariencia visual: colores, tipografías, espaciado, animaciones y el diseño responsivo. Es el lenguaje que convierte una estructura básica en una interfaz atractiva.</p>
+        <div class="code-block">
+          <div class="code-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="code-file">styles.css</span></div>
+          <pre class="code-content"><span class="sel">.hero</span> {
+  <span class="prp">display</span>: <span class="vl">flex</span>;
+  <span class="prp">background</span>: <span class="fn">linear-gradient</span>(
+    <span class="num">135deg</span>, <span class="str">#e8620a</span>, <span class="str">#c94a00</span>
+  );
+  <span class="prp">border-radius</span>: <span class="num">16px</span>;
+  <span class="prp">animation</span>: fadeIn <span class="num">0.6s</span> ease;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <div class="lang-card">
+      <div class="lang-card-top bg-js">
+        <div class="lang-logo" style="background:linear-gradient(135deg,#f7df1e,#8a7200);color:#1a1a1a;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS" style="width:38px;height:38px;">
+        </div>
+        <div class="lang-name-block">
+          <div class="lang-name">JavaScript</div>
+          <span class="lang-type-badge badge-web">Front/Back · Lógica</span>
+        </div>
+      </div>
+      <div class="lang-body">
+        <p class="lang-desc"><strong>JavaScript</strong> es el único lenguaje nativo del navegador. Agrega interactividad a las páginas web: formularios dinámicos, animaciones, llamadas a APIs y hoy también corre en servidores con Node.js. Es el lenguaje más usado del mundo.</p>
+        <div class="code-block">
+          <div class="code-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="code-file">app.js</span></div>
+          <pre class="code-content"><span class="kw">const</span> <span class="fn">saludar</span> = (<span class="vl">nombre</span>) <span class="kw">=></span> {
+  <span class="kw">const</span> msg = <span class="str">`Hola, <span class="vl">${nombre}</span>!`</span>;
+  <span class="fn">console</span>.log(msg);
+  <span class="kw">return</span> msg;
+};
+
+<span class="fn">saludar</span>(<span class="str">"Matias"</span>); <span class="cm">// Hola, Matias!</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHP -->
+    <div class="lang-card">
+      <div class="lang-card-top bg-php">
+        <div class="lang-logo" style="background:linear-gradient(135deg,#777bb4,#2d2f7a);color:#fff;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP" style="width:38px;height:38px;">
+        </div>
+        <div class="lang-name-block">
+          <div class="lang-name">PHP</div>
+          <span class="lang-type-badge badge-web">Back-end · Servidor</span>
+        </div>
+      </div>
+      <div class="lang-body">
+        <p class="lang-desc"><strong>PHP</strong> es el lenguaje de servidor que impulsa el 77% de la Web, incluyendo WordPress. Gestiona bases de datos, sesiones de usuario, formularios y genera HTML dinámico. Ideal para proyectos web clásicos y sistemas de contenido.</p>
+        <div class="code-block">
+          <div class="code-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="code-file">index.php</span></div>
+          <pre class="code-content"><span class="cm">&lt;?php</span>
+<span class="kw">$</span><span class="vl">nombre</span> = <span class="str">"Matias"</span>;
+<span class="kw">$</span><span class="vl">año</span>    = <span class="num">2025</span>;
+
+<span class="kw">if</span> (<span class="kw">$</span><span class="vl">año</span> &gt; <span class="num">2000</span>) {
+  <span class="fn">echo</span> <span class="str">"Bienvenido, $nombre"</span>;
+}
+<span class="cm">?&gt;</span></pre>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /lang-grid web -->
+
+
+  <!-- ═══ SECCIÓN 2: ESCRITORIO ═══ -->
+  <div class="sep"><div class="sep-line"></div><span class="sep-label">🖥️ Aplicaciones de Escritorio</span><div class="sep-line"></div></div>
+  <h2 class="section-heading">Lenguajes para Escritorio</h2>
+  <p class="section-intro">
+    Las aplicaciones que instalas en tu computadora — desde editores de imagen hasta software de ingeniería — están escritas en lenguajes de mayor rendimiento. Cada uno tiene sus fortalezas y ecosistema propio.
+  </p>
+
+  <div class="lang-grid">
+
+    <!-- Python -->
+    <div class="lang-card">
+      <div class="lang-card-top bg-py">
+        <div class="lang-logo" style="background:linear-gradient(135deg,#3572a5,#ffd343);color:#fff;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" style="width:38px;height:38px;">
+        </div>
+        <div class="lang-name-block">
+          <div class="lang-name">Python</div>
+          <span class="lang-type-badge badge-desk">IA · Ciencia de Datos</span>
+        </div>
+      </div>
+      <div class="lang-body">
+        <p class="lang-desc"><strong>Python</strong> es el lenguaje favorito de la inteligencia artificial y el análisis de datos. Su sintaxis simple y su gigante ecosistema de librerías (TensorFlow, PyTorch, NumPy) lo hacen imprescindible para quien estudia IA y cultura digital.</p>
+        <div class="code-block">
+          <div class="code-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="code-file">ia_modelo.py</span></div>
+          <pre class="code-content"><span class="cm"># Red neuronal simple</span>
+<span class="kw">import</span> tensorflow <span class="kw">as</span> tf
+
+modelo = tf.keras.<span class="fn">Sequential</span>([
+  tf.keras.layers.<span class="fn">Dense</span>(<span class="num">128</span>,
+    activation=<span class="str">'relu'</span>),
+  tf.keras.layers.<span class="fn">Dense</span>(<span class="num">10</span>)
+])
+modelo.<span class="fn">compile</span>(optimizer=<span class="str">'adam'</span>)</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Java -->
+    <div class="lang-card">
+      <div class="lang-card-top bg-java">
+        <div class="lang-logo" style="background:linear-gradient(135deg,#f89820,#5382a1);color:#fff;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java" style="width:38px;height:38px;">
+        </div>
+        <div class="lang-name-block">
+          <div class="lang-name">Java</div>
+          <span class="lang-type-badge badge-desk">Multiplataforma · OOP</span>
+        </div>
+      </div>
+      <div class="lang-body">
+        <p class="lang-desc"><strong>Java</strong> sigue el principio "escribe una vez, corre en cualquier lugar". Es la base de Android y miles de aplicaciones empresariales. Orientado a objetos, robusto y con más de 25 años de ecosistema consolidado.</p>
+        <div class="code-block">
+          <div class="code-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="code-file">Main.java</span></div>
+          <pre class="code-content"><span class="kw">public class</span> <span class="fn">Main</span> {
+  <span class="kw">public static void</span> <span class="fn">main</span>(
+      String[] args) {
+
+    <span class="kw">int</span> x = <span class="num">10</span>;
+    System.out.<span class="fn">println</span>(
+      <span class="str">"Valor: "</span> + x
+    );
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- C# -->
+    <div class="lang-card">
+      <div class="lang-card-top bg-cs">
+        <div class="lang-logo" style="background:linear-gradient(135deg,#68217a,#3b0052);color:#fff;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#" style="width:38px;height:38px;">
+        </div>
+        <div class="lang-name-block">
+          <div class="lang-name">C#</div>
+          <span class="lang-type-badge badge-desk">Windows · Videojuegos</span>
+        </div>
+      </div>
+      <div class="lang-body">
+        <p class="lang-desc"><strong>C#</strong> (C Sharp) es el lenguaje de Microsoft, creador del ecosistema .NET. Es el lenguaje principal de Unity para videojuegos y de aplicaciones empresariales Windows. Potente, moderno y con tipado estricto.</p>
+        <div class="code-block">
+          <div class="code-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="code-file">Player.cs</span></div>
+          <pre class="code-content"><span class="kw">public class</span> <span class="fn">Player</span>
+    : MonoBehaviour {
+
+  <span class="kw">public float</span> velocidad = <span class="num">5f</span>;
+
+  <span class="kw">void</span> <span class="fn">Update</span>() {
+    <span class="kw">float</span> h = Input.<span class="fn">GetAxis</span>(
+      <span class="str">"Horizontal"</span>);
+    transform.<span class="fn">Translate</span>(
+      h * velocidad);
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- C++ -->
+    <div class="lang-card">
+      <div class="lang-card-top bg-cpp">
+        <div class="lang-logo" style="background:linear-gradient(135deg,#00599c,#003f6b);color:#fff;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" alt="C++" style="width:38px;height:38px;">
+        </div>
+        <div class="lang-name-block">
+          <div class="lang-name">C++</div>
+          <span class="lang-type-badge badge-desk">Sistemas · Alto rendimiento</span>
+        </div>
+      </div>
+      <div class="lang-body">
+        <p class="lang-desc"><strong>C++</strong> es el lenguaje del rendimiento extremo. Opera a nivel de hardware, ideal para motores de videojuegos (Unreal Engine), sistemas operativos, software de simulación y aplicaciones que exigen velocidad máxima.</p>
+        <div class="code-block">
+          <div class="code-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="code-file">main.cpp</span></div>
+          <pre class="code-content"><span class="cm">// Suma de vectores</span>
+<span class="kw">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="kw">#include</span> <span class="str">&lt;vector&gt;</span>
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+  vector&lt;<span class="kw">int</span>&gt; nums = {<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>};
+  <span class="kw">for</span> (<span class="kw">auto</span> n : nums)
+    cout &lt;&lt; n &lt;&lt; <span class="str">" "</span>;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /lang-grid desk -->
+
+
+  <!-- ═══ SECCIÓN 3: DISEÑO ═══ -->
+  <div class="sep"><div class="sep-line"></div><span class="sep-label">🎨 Diseño y Maquetación</span><div class="sep-line"></div></div>
+  <h2 class="section-heading">Lenguajes y Herramientas de Diseño</h2>
+  <p class="section-intro">
+    El diseño digital también tiene su propio lenguaje. <strong>SCSS</strong> y <strong>Tailwind</strong> potencian el CSS clásico, mientras que herramientas como <strong>Figma</strong> y <strong>Adobe XD</strong> permiten prototipar interfaces antes de programarlas.
+  </p>
+
+  <div class="lang-grid">
+
+    <!-- SCSS -->
+    <div class="lang-card">
+      <div class="lang-card-top bg-scss">
+        <div class="lang-logo" style="background:linear-gradient(135deg,#cd6799,#8b1a56);color:#fff;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sass/sass-original.svg" alt="Sass/SCSS" style="width:38px;height:38px;">
+        </div>
+        <div class="lang-name-block">
+          <div class="lang-name">SCSS / Sass</div>
+          <span class="lang-type-badge badge-design">Pre-procesador CSS</span>
+        </div>
+      </div>
+      <div class="lang-body">
+        <p class="lang-desc"><strong>SCSS</strong> es un superconjunto de CSS que añade variables, anidamiento, mixins y funciones. Permite escribir hojas de estilo más organizadas, reutilizables y mantenibles. Se compila a CSS estándar para el navegador.</p>
+        <div class="code-block">
+          <div class="code-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="code-file">styles.scss</span></div>
+          <pre class="code-content"><span class="kw">$color-prim</span>: <span class="str">#e8620a</span>;
+<span class="kw">$radio</span>: <span class="num">12px</span>;
+
+<span class="fn">@mixin</span> <span class="fn">tarjeta</span>(<span class="kw">$sombra</span>: true) {
+  border-radius: <span class="kw">$radio</span>;
+  <span class="kw">@if</span> <span class="kw">$sombra</span> {
+    box-shadow: <span class="num">0 8px 24px</span>
+      rgba(<span class="num">0,0,0,.2</span>);
+  }
+}
+<span class="sel">.card</span> { <span class="fn">@include</span> <span class="fn">tarjeta</span>(); }</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tailwind -->
+    <div class="lang-card">
+      <div class="lang-card-top bg-tail">
+        <div class="lang-logo" style="background:linear-gradient(135deg,#06b6d4,#0369a1);color:#fff;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" alt="Tailwind" style="width:38px;height:38px;">
+        </div>
+        <div class="lang-name-block">
+          <div class="lang-name">Tailwind</div>
+          <span class="lang-type-badge badge-design">Framework CSS · Utilidades</span>
+        </div>
+      </div>
+      <div class="lang-body">
+        <p class="lang-desc"><strong>Tailwind CSS</strong> es el framework de diseño más popular actualmente. En lugar de escribir CSS, aplicas clases directamente en el HTML. Permite construir interfaces complejas muy rápido sin salir del archivo HTML.</p>
+        <div class="code-block">
+          <div class="code-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="code-file">card.html</span></div>
+          <pre class="code-content"><span class="tg">&lt;div</span> <span class="at">class</span>=<span class="vl">"
+  bg-white rounded-2xl
+  shadow-lg p-6
+  flex flex-col gap-4
+  hover:scale-105
+  transition-transform"</span><span class="tg">&gt;</span>
+  <span class="tg">&lt;h2</span> <span class="at">class</span>=<span class="vl">"text-xl font-bold"</span><span class="tg">&gt;</span>
+    Tarjeta
+  <span class="tg">&lt;/h2&gt;</span>
+<span class="tg">&lt;/div&gt;</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Figma -->
+    <div class="lang-card">
+      <div class="lang-card-top bg-fig">
+        <div class="lang-logo" style="background:linear-gradient(135deg,#a259ff,#1abcfe);color:#fff;">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma" style="width:38px;height:38px;">
+        </div>
+        <div class="lang-name-block">
+          <div class="lang-name">Figma</div>
+          <span class="lang-type-badge badge-design">UI/UX · Prototipado</span>
+        </div>
+      </div>
+      <div class="lang-body">
+        <p class="lang-desc"><strong>Figma</strong> es la herramienta estándar de la industria para diseño de interfaces. Permite crear wireframes, prototipos interactivos y sistemas de diseño colaborativos en tiempo real. Su lenguaje interno incluye Auto Layout, Variables y componentes reutilizables.</p>
+        <div class="code-block">
+          <div class="code-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="code-file">componente.fig (export CSS)</span></div>
+          <pre class="code-content"><span class="cm">/* CSS generado por Figma */</span>
+<span class="sel">.btn-primario</span> {
+  <span class="prp">display</span>: <span class="vl">flex</span>;
+  <span class="prp">padding</span>: <span class="num">12px 24px</span>;
+  <span class="prp">background</span>: <span class="str">#A259FF</span>;
+  <span class="prp">border-radius</span>: <span class="num">100px</span>;
+  <span class="prp">font-weight</span>: <span class="num">600</span>;
+  <span class="prp">color</span>: <span class="str">#FFFFFF</span>;
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Adobe XD -->
+    <div class="lang-card">
+      <div class="lang-card-top bg-xd">
+        <div class="lang-logo" style="background:linear-gradient(135deg,#ff0099,#470042);color:#fff; font-size:1.3rem; font-weight:900;">Xd</div>
+        <div class="lang-name-block">
+          <div class="lang-name">Adobe XD</div>
+          <span class="lang-type-badge badge-design">UI/UX · Adobe Creative</span>
+        </div>
+      </div>
+      <div class="lang-body">
+        <p class="lang-desc"><strong>Adobe XD</strong> es la herramienta de prototipado del ecosistema Adobe. Permite diseñar flujos de usuario, animar transiciones entre pantallas y exportar especificaciones de diseño para desarrolladores con integración directa a Photoshop e Illustrator.</p>
+        <div class="code-block">
+          <div class="code-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="code-file">pantalla.xd (export CSS)</span></div>
+          <pre class="code-content"><span class="cm">/* Especificaciones XD */</span>
+<span class="sel">.pantalla-inicio</span> {
+  <span class="prp">width</span>: <span class="num">375px</span>;
+  <span class="prp">height</span>: <span class="num">812px</span>;
+  <span class="prp">background</span>: <span class="str">#FF0099</span>;
+  <span class="prp">font-family</span>: <span class="str">"Adobe Clean"</span>;
+  <span class="prp">transition</span>: all <span class="num">0.3s</span>
+    cubic-bezier(.4,0,.2,1);
+}</pre>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /lang-grid design -->
+
+
+  <!-- ═══ TABLA COMPARATIVA ═══ -->
+  <div class="sep"><div class="sep-line"></div><span class="sep-label">📊 Comparativa</span><div class="sep-line"></div></div>
+  <h2 class="section-heading">Tabla Comparativa</h2>
+  <p class="section-intro">Resumen de los principales lenguajes, su categoría, dificultad y su uso principal en la cultura digital.</p>
+
+  <div class="compare-wrap">
+    <table class="compare">
+      <thead>
+        <tr>
+          <th>Lenguaje</th>
+          <th>Categoría</th>
+          <th>Dificultad</th>
+          <th>Uso principal</th>
+          <th>¿Para qué sirve en IA?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>HTML</strong></td>
+          <td><span class="diff-badge" style="background:rgba(97,218,251,.15);color:#61dafb;">Web</span></td>
+          <td><span class="diff-badge diff-easy">Fácil</span></td>
+          <td>Estructura de páginas web</td>
+          <td>Presentar resultados de modelos IA</td>
+        </tr>
+        <tr>
+          <td><strong>CSS</strong></td>
+          <td><span class="diff-badge" style="background:rgba(97,218,251,.15);color:#61dafb;">Web</span></td>
+          <td><span class="diff-badge diff-easy">Fácil</span></td>
+          <td>Diseño y estilos visuales</td>
+          <td>Interfaces de apps de IA</td>
+        </tr>
+        <tr>
+          <td><strong>JavaScript</strong></td>
+          <td><span class="diff-badge" style="background:rgba(97,218,251,.15);color:#61dafb;">Web</span></td>
+          <td><span class="diff-badge diff-medium">Medio</span></td>
+          <td>Interactividad y lógica web</td>
+          <td>TensorFlow.js — IA en el navegador</td>
+        </tr>
+        <tr>
+          <td><strong>PHP</strong></td>
+          <td><span class="diff-badge" style="background:rgba(97,218,251,.15);color:#61dafb;">Web</span></td>
+          <td><span class="diff-badge diff-medium">Medio</span></td>
+          <td>Servidor web, bases de datos</td>
+          <td>Backend de APIs de IA</td>
+        </tr>
+        <tr>
+          <td><strong>Python</strong></td>
+          <td><span class="diff-badge" style="background:rgba(167,139,250,.15);color:#a78bfa;">Escritorio</span></td>
+          <td><span class="diff-badge diff-easy">Fácil</span></td>
+          <td>IA, Data Science, automatización</td>
+          <td>Principal lenguaje de ML e IA</td>
+        </tr>
+        <tr>
+          <td><strong>Java</strong></td>
+          <td><span class="diff-badge" style="background:rgba(167,139,250,.15);color:#a78bfa;">Escritorio</span></td>
+          <td><span class="diff-badge diff-medium">Medio</span></td>
+          <td>Apps empresariales y Android</td>
+          <td>IA en apps móviles</td>
+        </tr>
+        <tr>
+          <td><strong>C#</strong></td>
+          <td><span class="diff-badge" style="background:rgba(167,139,250,.15);color:#a78bfa;">Escritorio</span></td>
+          <td><span class="diff-badge diff-medium">Medio</span></td>
+          <td>Videojuegos (Unity), apps Windows</td>
+          <td>IA en videojuegos y simulaciones</td>
+        </tr>
+        <tr>
+          <td><strong>C++</strong></td>
+          <td><span class="diff-badge" style="background:rgba(167,139,250,.15);color:#a78bfa;">Escritorio</span></td>
+          <td><span class="diff-badge diff-hard">Difícil</span></td>
+          <td>Sistemas, motores de juego</td>
+          <td>Núcleo de TensorFlow y PyTorch</td>
+        </tr>
+        <tr>
+          <td><strong>SCSS</strong></td>
+          <td><span class="diff-badge" style="background:rgba(255,140,56,.15);color:#ff8c38;">Diseño</span></td>
+          <td><span class="diff-badge diff-easy">Fácil</span></td>
+          <td>Hojas de estilo avanzadas</td>
+          <td>Interfaces de dashboards de IA</td>
+        </tr>
+        <tr>
+          <td><strong>Tailwind</strong></td>
+          <td><span class="diff-badge" style="background:rgba(255,140,56,.15);color:#ff8c38;">Diseño</span></td>
+          <td><span class="diff-badge diff-easy">Fácil</span></td>
+          <td>Prototipado rápido de UI</td>
+          <td>Interfaces de modelos web</td>
+        </tr>
+        <tr>
+          <td><strong>Figma</strong></td>
+          <td><span class="diff-badge" style="background:rgba(255,140,56,.15);color:#ff8c38;">Diseño</span></td>
+          <td><span class="diff-badge diff-easy">Fácil</span></td>
+          <td>Prototipado UI/UX</td>
+          <td>Diseño de apps con IA generativa</td>
+        </tr>
+        <tr>
+          <td><strong>Adobe XD</strong></td>
+          <td><span class="diff-badge" style="background:rgba(255,140,56,.15);color:#ff8c38;">Diseño</span></td>
+          <td><span class="diff-badge diff-easy">Fácil</span></td>
+          <td>Flujos UI y maquetación</td>
+          <td>Flujos de apps inteligentes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</article>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <p class="footer-school">Centro de Bachillerato Tecnológico Industrial y de Servicios No. 144</p>
+  <div class="footer-divider"></div>
+  <p class="footer-details">
+    Especialidad: Inteligencia Artificial  Alumno:Garduño Escobar Matias Rafael<br>
+    Profesor: Jordy Jesús Chirino Balcázar
+  </p>
+</footer>
+
+</body>
+</html>

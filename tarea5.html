@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Figuras geometricas con HTML</title>
+	<style>
+		
+		body
+		{
+			background: #F26A18;
+			color: white;
+			text-align: center;
+		}
+
+		div
+		{
+			background: #F59D22;
+			margin: 0 0 10px 10px;
+			display: inline-block;
+		}
+
+		.cuadrado
+		{
+			width: 200px;
+			height: 200px;
+		}
+
+		.circulo
+		{
+			width: 200px;
+			height: 200px;
+			border-radius: 50%;
+		}
+
+		.rectangulo
+		{
+			width: 400px;
+			height: 200px;
+		}
+
+		.descripcion
+		{
+			background: #F5CF27;
+			width: 80%;
+			border-radius: 20px;	
+			border:4px white solid;
+			color: black;
+		}
+		.topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 32px;
+      background: rgba(7,13,20,0.92); backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(45,212,191,0.12);
+      }
+      .back-btn {
+      	display: inline-flex; align-items: center; gap: 9px;
+      	padding: 8px 20px; border-radius: 50px;
+      	border: 1.5px solid rgba(255,140,56,0.55); background: transparent;
+     	 color: var(--orange-bright); font-family: 'Space Mono', monospace;
+      	font-size: 0.75rem; letter-spacing: 0.12em; text-decoration: none;
+     	 cursor: pointer; transition: background .2s, color .2s, transform .2s;
+    }
+    .back-btn:hover { background: var(--orange-mid); color: #fff; border-color: var(--orange-mid); transform: translateX(-3px); }
+    .back-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-badge { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.15em; text-transform: uppercase; }
+    .nav-badge span { color: var(--orange-bright); }
+	</style>
+</head>
+<body>
+	<nav class="topnav">
+  		<a href="index.html" class="back-btn">
+   			 <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+   			 Volver al portafolio
+  		</a>
+  		<span class="nav-badge">Tarea <span>05</span> — Cultura Digital 2</span>
+	</nav>
+	<h1>Creando figuras con html y css</h1>
+	<div class="cuadrado"></div>
+	<div class="circulo"></div>
+	<div class="rectangulo"></div>
+	<div class="descripcion">
+		<p>Acerca de mi</p>
+		<p>Soy un ser humano de género masculino, me llamo Matias Rafael Garduño Escobar. Tengo 15 años y este año cumpliré 16. Soy estudiante en el nivel de Educación Media Superior y formo parte del plantel llamado "Centro de Bachillerato Tecnológico Industrial y de Servicios No. 144". Actualmente estoy en el segundo semestre, formando parte del grupo 2°A, especializado en Inteligencia Artificial.
+		</p>
+	</div>
+	<img src="imagenes/IA.jpg" width="450px" height="300px">
+
+	<p>creado por: Matias Garduño</p>
+</body>
+</html>
